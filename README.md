@@ -10,6 +10,7 @@ The project also includes a customer-facing demo storefront at `/customer.html`.
 - [Screens and workflows](#screens-and-workflows)
 - [Technology](#technology)
 - [Run locally](#run-locally)
+- [Deploy online](#deploy-online)
 - [Upload to GitHub](#upload-to-github)
 - [Project files](#project-files)
 - [How the app works](#how-the-app-works)
@@ -189,26 +190,33 @@ node server.js
 
 Then visit `http://localhost:3001`. There is no `npm install`, build, or separate static-file server step.
 
+## Deploy online
+
+The Vercel deployment serves static files but does not run this project's Node.js API. Use the included `render.yaml` Blueprint to deploy the complete Node.js server so the pages and `/api/*` routes share one origin.
+
+1. Sign in to Render with the GitHub account that can access `Karan-flux/Kitchen-OS`.
+2. Open the [Render Blueprint deployment page](https://render.com/deploy?repo=https://github.com/Karan-flux/Kitchen-OS).
+3. Review the `kitchen-os` web service settings from `render.yaml` and select **Apply**.
+4. Wait for the first build and deployment to finish. Use the `onrender.com` service URL from the Render dashboard for the owner page; append `/customer.html` for the customer demo.
+5. Check `<your-service-url>/api/health`. It should return JSON with `"ok": true`.
+
+The Blueprint uses Render's free web-service plan and needs no package install. Free instances can sleep while idle, and their local filesystem is temporary. Demo orders and inventory stored in SQLite can be lost when the service restarts or redeploys. Do not enter real customer information or rely on this deployment for production data. Persistent storage requires a paid disk or changing the app to use a managed database.
+
 ## Upload to GitHub
 
 Before publishing a public repository, confirm the student names and IDs above may be shared, and decide whether to add a `LICENSE`. The local SQLite database, legacy kitchen records, environment files, and dependency folders are excluded by `.gitignore`.
 
-From the project directory, initialize and review the repository before creating a commit:
+This project is already connected to `https://github.com/Karan-flux/Kitchen-OS.git`. After making changes, review and push them from the project directory:
 
 ```powershell
-git init -b main
 git add .
 git status --short
 git diff --cached --stat
+git commit -m "Describe your change"
+git push origin main
 ```
 
-Check that `data/techtonic.sqlite`, `data/orders.json`, `data/inventory.json`, and any secrets are not staged. Then create a repository on GitHub and connect it:
-
-```powershell
-git commit -m "Prepare TechTonic Kitchen Ops project"
-git remote add origin https://github.com/<YOUR-USERNAME>/<YOUR-REPOSITORY>.git
-git push -u origin main
-```
+Check that `data/techtonic.sqlite`, `data/orders.json`, `data/inventory.json`, and any secrets are not staged. These local data files are excluded by `.gitignore`.
 
 GitHub Actions runs the JavaScript syntax checks and `node --test` for pushes and pull requests. The project requires no package installation.
 
@@ -220,6 +228,7 @@ tech0tonic/
 ├── .github/
 │   └── workflows/
 │       └── node-tests.yml # Runs syntax checks and tests on pushes and pull requests
+├── render.yaml           # Render Blueprint for the Node.js web service
 ├── index.html          # Owner dashboard, order dialog, and assistant panel
 ├── style.css           # Responsive dashboard and floating assistant styles
 ├── script.js           # Dashboard rendering and browser interactions
@@ -408,6 +417,7 @@ No `.env` file or package manifest is required.
 - **No recipe deduction:** Recording a ticket does not consume stock automatically because recipe-to-ingredient quantities are not modeled.
 - **Sales scope:** Reports include only orders manually recorded in this app. They are not accounting reports or a reconciliation of partner payouts, refunds, discounts, tax, or cancellations from external platforms.
 - **Local SQLite storage:** This is intended for a single local app instance. Back up `data/techtonic.sqlite`; the legacy JSON files are not updated after import.
+- **Free hosted demo storage:** The Render free service uses an ephemeral filesystem and may sleep when idle. SQLite demo data can reset after restarts or redeployments; use persistent storage and a security review before production.
 - **No authentication or roles:** Anyone with access to the server can view and change its records. Restrict network exposure; add authentication and authorization before deployment.
 - **No payment, delivery, supplier, or POS services:** Those integrations are outside the current project.
 - **Browser speech support:** Speech recognition is browser-dependent and works best in Chrome or Edge. Typing remains available when the browser does not support recognition.

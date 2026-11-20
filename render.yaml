@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: kitchen-os
+    runtime: node
+    plan: free
+    buildCommand: node --check server.js
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 24.16.0
