@@ -35,9 +35,7 @@ The project also includes a customer-facing demo storefront at `/customer.html`.
 | Project guide | `[Enter guide name]` |
 | Guide designation | `[Enter guide designation]` |
 | Company (internship only) | `N/A` |
-Replace the bracketed fields with the details supplied by your college and guide before submitting the report.
 
-**Before creating a public repository:** confirm every contributor agrees to publish their name. Student ID numbers are omitted from this public-project copy. No `LICENSE` file is included; choose and add a license before granting reuse rights.
 
 ### Problem and users
 
