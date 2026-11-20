@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f5f2">
+  <title>TechTonic | Kitchen Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="TechTonic Kitchen overview"><span class="brand-mark">tt</span><span>tech<span class="brand-accent">tonic</span><small>KITCHEN OPS</small></span></a>
+      <div class="kitchen-switcher"><span class="kitchen-avatar">K1</span><span><strong>Kitchen workspace</strong><small>Operations · Local</small></span></div>
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="side-nav" aria-label="Workspace navigation">
+        <a class="nav-link active" href="#overview"><span class="nav-icon">◫</span>Overview</a>
+        <a class="nav-link" href="#orders"><span class="nav-icon">≡</span>Order queue<span class="nav-badge" id="navOrderCount">0</span></a>
+        <a class="nav-link" href="#inventory"><span class="nav-icon">▦</span>Inventory<span class="nav-alert" id="navStockAlert"></span></a>
+        <a class="nav-link" href="#reports"><span class="nav-icon">▥</span>Shift report</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="service-status"><span class="status-dot"></span><span><strong>Kitchen is open</strong><small>Orders are being prepared</small></span></div>
+        <div class="sidebar-user"><span class="user-avatar">OP</span><span><strong>Kitchen operator</strong><small>Owner workspace</small></span><button class="more-button" id="workspaceOptionsButton" type="button" title="Open owner actions" aria-label="Open owner actions" aria-haspopup="true" aria-expanded="false" aria-controls="ownerMenu">···</button></div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Workspace</span><span>/</span><strong>Overview</strong></div>
+        <div class="topbar-actions"><span class="connection"><span class="status-dot"></span><span id="connectionLabel">Connecting</span></span><span class="topbar-divider"></span><span class="today-label" id="todayLabel"></span><button class="icon-button" id="refreshButton" title="Refresh kitchen data" aria-label="Refresh kitchen data">↻</button><button class="operator-button" id="ownerMenuToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="ownerMenu"><span class="user-avatar small-avatar">OP</span><span>Owner</span><span aria-hidden="true">⌄</span></button>
+          <div class="owner-menu" id="ownerMenu" aria-label="Owner actions" hidden>
+            <div class="owner-menu-heading"><strong>Kitchen operator</strong><small>Owner workspace</small></div>
+            <a class="owner-menu-link" href="/customer.html" target="_blank" rel="noopener" data-owner-link>Open customer ordering demo <span aria-hidden="true">↗</span></a>
+            <button type="button" data-owner-action="refresh">Refresh dashboard</button>
+            <button type="button" data-owner-action="orders">Go to order queue</button>
+            <button type="button" data-owner-action="inventory">Go to inventory</button>
+            <button type="button" data-owner-action="assistant">Open Kitchen Assistant</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <section class="page-heading">
+          <div><p class="eyebrow" id="greeting">GOOD SHIFT</p><h1>Kitchen overview</h1><p class="page-subtitle">Here is what needs your attention today.</p></div>
+          <button class="primary-button" id="openOrderDialog"><span>＋</span> Record incoming order</button>
+        </section>
+
+        <section class="metrics-grid" aria-label="Today's kitchen metrics">
+          <article class="metric-card"><div class="metric-heading"><span>Orders today</span><span class="metric-icon icon-orders">≡</span></div><div class="metric-value" id="todayOrders">0</div><div class="metric-foot"><span class="metric-note">All sources</span><span class="metric-accent" id="activeSummary">0 active</span></div></article>
+          <article class="metric-card"><div class="metric-heading"><span>In preparation</span><span class="metric-icon icon-prep">◷</span></div><div class="metric-value" id="prepCount">0</div><div class="metric-foot"><span class="metric-note">Kitchen queue</span><span class="metric-note" id="readySummary">0 ready</span></div></article>
+          <article class="metric-card"><div class="metric-heading"><span>Sales today</span><span class="metric-icon icon-sales">₹</span></div><div class="metric-value" id="todaySales">₹0</div><div class="metric-foot"><span class="metric-note">From recorded orders</span><span class="metric-note" id="averageOrder">₹0 avg. order</span></div></article>
+          <article class="metric-card metric-alert"><div class="metric-heading"><span>Restock alerts</span><span class="metric-icon icon-stock">!</span></div><div class="metric-value" id="lowStockCount">0</div><div class="metric-foot"><span class="metric-note">At or below reorder point</span><a href="#inventory" class="metric-link">Review stock <span>→</span></a></div></article>
+        </section>
+
+        <section class="operations-grid" id="orders">
+          <article class="panel queue-panel">
+            <div class="panel-heading"><div><div class="panel-title-row"><h2>Live order queue</h2><span class="live-indicator"><span class="status-dot"></span>LIVE</span></div><p>Orders from delivery partners, phone, and walk-ins.</p></div><button class="quiet-button" id="queueRefresh">Refresh <span>↻</span></button></div>
+            <div class="queue-toolbar"><div class="filter-tabs" role="group" aria-label="Filter order queue"><button class="filter-tab selected" data-filter="Active">Active <span id="activeTabCount">0</span></button><button class="filter-tab" data-filter="Preparing">Preparing</button><button class="filter-tab" data-filter="Ready">Ready</button><button class="filter-tab" data-filter="All">All orders</button></div><label class="queue-search"><span>⌕</span><input id="orderSearch" type="search" placeholder="Find order" aria-label="Find an order"></label></div>
+            <div class="order-list" id="ordersList" aria-live="polite"></div>
+            <div class="queue-footer"><span id="queueSummary">No orders yet</span><span class="auto-refresh"><span class="status-dot"></span>Auto-refreshes every 15 sec</span></div>
+          </article>
+
+          <article class="panel attention-panel">
+            <div class="panel-heading"><div><div class="panel-title-row"><h2>Needs attention</h2><span class="attention-count" id="attentionCount">0</span></div><p>Items at or below their reorder point.</p></div><a class="text-link" href="#inventory">Inventory <span>→</span></a></div>
+            <div class="attention-list" id="attentionList"></div>
+            <div class="attention-footer"><span class="attention-symbol">!</span><p>Review stock before the next prep rush.</p></div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel inventory-panel" id="inventory">
+            <div class="panel-heading"><div><h2>Inventory</h2><p>Track on-hand quantities and record deliveries.</p></div><span class="updated-label" id="inventoryUpdated">Saved locally</span></div>
+            <div class="inventory-table-head"><span>INGREDIENT</span><span>ON HAND</span><span>REORDER POINT</span><span>STOCK LEVEL</span><span>RECEIVE</span></div>
+            <div id="inventoryList" class="inventory-table" aria-live="polite"></div>
+          </article>
+          <article class="panel shift-panel" id="reports">
+            <div class="panel-heading"><div><h2>Shift pulse</h2><p>Recorded sales over the last 7 days.</p></div><span class="report-period">7 DAYS</span></div>
+            <div class="sales-total"><strong id="weekSales">₹0</strong><span>total recorded</span></div>
+            <div class="sales-chart" id="salesChart" aria-label="Sales by day"></div>
+            <div class="chart-legend"><span><i></i>Order sales</span><span id="weekOrderCount">0 orders</span></div>
+            <div class="top-dish-heading"><strong>Top dishes today</strong><span>BY QUANTITY</span></div>
+            <div class="top-dishes" id="topDishes"></div>
+          </article>
+        </section>
+        <footer class="app-footer"><span>TechTonic Kitchen Ops</span><span>Order intake is recorded manually. Partner integrations are not connected.</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="order-dialog" id="orderDialog">
+    <form id="orderForm" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">MANUAL ORDER INTAKE</p><h2>Record an incoming order</h2><p>Enter an order received through a delivery app, phone, or walk-in.</p></div><button class="dialog-close" type="button" id="closeOrderDialog" aria-label="Close">×</button></div>
+      <div class="form-row"><label>Order source<select id="orderSource"><option>Swiggy</option><option>Zomato</option><option>Phone</option><option>Walk-in</option><option>Other</option></select></label><label>Customer or ticket name <span class="optional">Optional</span><input id="customerName" type="text" maxlength="60" placeholder="e.g. Order 4821"></label></div>
+      <div class="order-items-heading"><strong>Add items</strong><span>Set quantity for each dish</span></div>
+      <div class="order-item-picker" id="orderItemPicker"></div>
+      <div class="dialog-error" id="orderError" role="alert"></div>
+      <div class="dialog-actions"><span id="orderEstimate">Select items to calculate total</span><button class="secondary-button" type="button" id="cancelOrderDialog">Cancel</button><button class="primary-button" type="submit">Add to kitchen queue <span>→</span></button></div>
+    </form>
+  </dialog>
+
+  <aside class="assistant-panel" id="kitchenAssistant" aria-label="Kitchen Assistant">
+    <div class="assistant-header">
+      <span class="assistant-mark" aria-hidden="true">K</span>
+      <span class="assistant-heading"><strong>Kitchen Assistant</strong><small>Kitchen operations</small></span>
+      <span class="assistant-live" aria-hidden="true"></span>
+      <button class="assistant-collapse" id="assistantCollapse" type="button" aria-label="Hide conversation" title="Hide conversation" aria-expanded="true" aria-controls="assistantLog">−</button>
+    </div>
+    <div class="assistant-log" id="assistantLog" role="log" aria-live="polite" aria-relevant="additions">
+      <p class="assistant-message assistant-message-bot">Ask about stock, sales, orders, or tell me an action to prepare.</p>
+    </div>
+    <form class="assistant-form" id="assistantForm">
+      <button class="assistant-mic" id="assistantMic" type="button" title="Speak to Kitchen Assistant" aria-label="Speak to Kitchen Assistant" aria-pressed="false">●</button>
+      <label class="assistant-input-label" for="assistantInput">Message</label>
+      <input id="assistantInput" type="text" autocomplete="off" placeholder="Ask or give a command" maxlength="500">
+      <button class="assistant-send" type="submit" aria-label="Send message" title="Send message">↑</button>
+    </form>
+    <p class="assistant-status" id="assistantStatus" aria-live="polite"></p>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js?v=5"></script>
+  <script src="voice.js?v=2"></script>
+</body>
+</html>

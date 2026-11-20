@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f5f0">
+  <title>Order from TechTonic Kitchen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="customer.css?v=1">
+</head>
+<body>
+  <div class="customer-app">
+    <header class="customer-topbar">
+      <a class="customer-brand" href="/" aria-label="TechTonic Kitchen Ops home">
+        <span class="customer-brand-mark">tt</span>
+        <span class="customer-brand-name">tech<span>tonic</span><small>KITCHEN</small></span>
+      </a>
+      <span class="demo-tag"><i></i> CUSTOMER DEMO</span>
+      <a class="back-to-kitchen" href="/">Kitchen dashboard <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main class="customer-main">
+      <section class="customer-intro" aria-labelledby="pageTitle">
+        <div>
+          <p class="customer-eyebrow">A GOOD MEAL STARTS HERE</p>
+          <h1 id="pageTitle">Order from the kitchen</h1>
+          <p class="customer-subtitle">Pick your favourites and send your order straight to the kitchen queue.</p>
+        </div>
+        <div class="service-chip"><span class="service-dot"></span> Kitchen taking orders</div>
+      </section>
+
+      <div class="customer-layout">
+        <section class="menu-section" id="menuSection" aria-labelledby="menuTitle">
+          <div class="menu-section-heading">
+            <div>
+              <h2 id="menuTitle">The menu</h2>
+              <p>Freshly prepared, made to order.</p>
+            </div>
+            <button class="menu-reload" id="reloadMenu" type="button" title="Reload menu" aria-label="Reload menu">↻</button>
+          </div>
+          <div class="menu-tools">
+            <div class="category-filters" id="categoryFilters" role="group" aria-label="Filter menu by category"></div>
+            <label class="customer-search"><span aria-hidden="true">⌕</span><span class="visually-hidden">Search menu</span><input id="customerSearch" type="search" placeholder="Search dishes" autocomplete="off"></label>
+          </div>
+          <div class="menu-list-heading"><strong>Kitchen favourites</strong><span id="menuResultCount">0 dishes</span></div>
+          <p class="menu-status" id="menuStatus" role="status" aria-live="polite">Loading menu...</p>
+          <div class="menu-grid" id="menuGrid" aria-live="polite"></div>
+        </section>
+
+        <aside class="cart-panel" id="cartPanel" aria-labelledby="cartTitle">
+          <div class="cart-heading">
+            <div><p class="customer-eyebrow">YOUR SELECTION</p><h2 id="cartTitle">Your order</h2></div>
+            <span class="cart-count" id="cartItemCount">0 items</span>
+          </div>
+          <div class="cart-items" id="cartItems" aria-live="polite"></div>
+          <div class="cart-total-row"><span>Total</span><strong id="orderTotal">₹0</strong></div>
+          <form id="checkoutForm" class="checkout-form">
+            <label for="customerName">Name <span>Optional</span></label>
+            <input id="customerName" type="text" maxlength="60" autocomplete="name" placeholder="e.g. Alex">
+            <p class="demo-disclaimer">Demo orders are recorded in the kitchen queue. No payment is collected.</p>
+            <p class="checkout-error" id="checkoutError" role="alert"></p>
+            <button class="checkout-button" id="placeOrderButton" type="submit" disabled>Place demo order · ₹0</button>
+          </form>
+          <a class="cart-back-link" href="/">Return to kitchen dashboard <span aria-hidden="true">↗</span></a>
+        </aside>
+      </div>
+
+      <footer class="customer-footer"><span>TechTonic Kitchen</span><span>Order preview · No payment required</span></footer>
+    </main>
+  </div>
+
+  <div class="mobile-cart-bar" id="mobileCartBar" hidden>
+    <button id="mobileCartButton" type="button">Review order</button>
+  </div>
+
+  <dialog class="success-dialog" id="orderSuccessDialog" aria-labelledby="receiptTitle">
+    <div class="success-mark" aria-hidden="true">✓</div>
+    <p class="customer-eyebrow">ORDER SENT</p>
+    <h2 id="receiptTitle">The kitchen has your order</h2>
+    <p class="receipt-copy">Your demo order is in the preparation queue.</p>
+    <div class="receipt-details">
+      <span>Order number</span><strong id="receiptOrderId">—</strong>
+      <span>Total</span><strong id="receiptTotal">₹0</strong>
+      <span>Status</span><strong id="receiptStatus">Preparing</strong>
+    </div>
+    <div class="receipt-actions">
+      <button class="continue-button" id="continueShopping" type="button">Continue browsing</button>
+      <a class="dashboard-button" href="/">View kitchen dashboard <span aria-hidden="true">↗</span></a>
+    </div>
+  </dialog>
+
+  <script src="customer.js?v=1"></script>
+</body>
+</html>
