@@ -15,7 +15,6 @@ The project also includes a customer-facing demo storefront at `/customer.html`.
 - [Project files](#project-files)
 - [How the app works](#how-the-app-works)
 - [Verification](#verification)
-- [Test report](TEST_REPORT.md)
 - [Configuration](#configuration)
 - [Limitations and production notes](#limitations-and-production-notes)
 - [Troubleshooting](#troubleshooting)
@@ -202,7 +201,7 @@ The Blueprint uses Render's free web-service plan and needs no package install. 
 
 ## Upload to GitHub
 
-Before publishing a public repository, confirm the student names and IDs above may be shared, and decide whether to add a `LICENSE`. The local SQLite database, legacy kitchen records, environment files, and dependency folders are excluded by `.gitignore`.
+Before publishing a public repository, confirm contributors agree to share their names, and decide whether to add a `LICENSE`. The local SQLite database, legacy kitchen records, environment files, and dependency folders are excluded by `.gitignore`.
 
 This project is already connected to `https://github.com/Karan-flux/Kitchen-OS.git`. After making changes, review and push them from the project directory:
 
@@ -369,13 +368,28 @@ Saved entries also get `updatedAt` after a stock adjustment. These are sample op
 
 ## Verification
 
-Run all backend integration tests from the project directory:
+**Last verified:** November 20, 2026 on Node.js 24.16.0 and Windows.
+
+| Check | Result | Details |
+| --- | --- | --- |
+| `node --test` | PASS | 12 tests, 0 failures, 0 skipped. |
+| `node --check` on JavaScript files | PASS | All seven project JavaScript files parsed successfully. |
+| Customer storefront integration | PASS | Static assets served; order saved in a temporary database with server-owned prices and visible in dashboard data. |
+| Live Render API | PASS | `/api/health`, `/api/dashboard`, `/api/menu`, and `/api/assistant` returned HTTP 200. |
+| Live customer page | PASS | `/customer.html` loaded all eight menu items. |
+| Browser checks | PASS | Dashboard connection, customer filtering and basket, assistant questions/actions, and responsive layout checked. Checkout browser smoke test intercepted its POST to avoid writing a test order to live data. |
+
+Automated coverage includes order validation and server-side pricing, order status and persistence, inventory updates and stock-underflow rejection, legacy JSON import, the 64 KiB UTF-8 request limit, assistant questions and confirmed actions, and the customer-to-kitchen flow. Integration tests use temporary SQLite databases and random local ports, then remove the temporary files.
+
+The browser checkout smoke test used an intercepted response; real customer-order persistence and server pricing are verified by the automated integration test. Live checks verified API response codes without placing a live order.
+
+Run the integration tests from the project directory:
 
 ```powershell
 node --test
 ```
 
-The tests start temporary local servers and verify server-side item validation and pricing, order source/default handling, cancellation, dashboard data, rejected stock underflow, restocking, persistence after a restart, one-time import of existing JSON data, and the 64 KiB UTF-8 request limit. Temporary database files are removed afterwards. See [TEST_REPORT.md](TEST_REPORT.md) for the latest recorded results.
+The tests start temporary local servers and remove their temporary database files afterwards.
 
 Check JavaScript syntax with:
 
